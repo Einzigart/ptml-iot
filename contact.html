@@ -54,23 +54,28 @@
                                 <form id="contactForm" action="https://formspree.io/f/mdkdywgq" method="POST">
                                     <!-- Name input-->
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required maxlength="50" pattern="^[A-Za-z\s\-\.]+$" />
+                                        <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'\s\.\-]+$" autocomplete="name" />
                                         <label for="name">Full name</label>
                                     </div>
                                     <!-- Email address input-->
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" required maxlength="100" pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" />
+                                        <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" required maxlength="100" autocomplete="email" />
                                         <label for="email">Email address</label>
                                     </div>
                                     <!-- Phone number input-->
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="phone" name="phone" type="tel" placeholder="(123) 456-7890" maxlength="20" pattern="^[0-9\-\+\s\(\)]+$" />
+                                        <input class="form-control" id="phone" name="phone" type="tel" placeholder="(123) 456-7890" maxlength="20" pattern="^[0-9\-\+\s\(\)]+$" autocomplete="tel" inputmode="tel" />
                                         <label for="phone">Phone number</label>
                                     </div>
                                     <!-- Message input-->
                                     <div class="form-floating mb-3">
-                                        <textarea class="form-control" id="message" name="message" placeholder="Enter your message here..." style="height: 10rem" required maxlength="1000"></textarea>
+                                        <textarea class="form-control" id="message" name="message" placeholder="Enter your message here..." style="height: 10rem" required maxlength="1000" autocomplete="off"></textarea>
                                         <label for="message">Message</label>
+                                    </div>
+                                    <!-- Honeypot field (hidden from users) -->
+                                    <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+                                        <label for="hp-field">If you are a human, leave this field empty</label>
+                                        <input type="text" id="hp-field" name="website" tabindex="-1" autocomplete="off" />
                                     </div>
                                     <!-- Submit Button-->
                                     <div class="d-grid">
@@ -106,6 +111,19 @@
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script>
+        // Simple honeypot check before submit
+        (function(){
+            const form = document.getElementById('contactForm');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                const hp = document.getElementById('hp-field');
+                if(hp && hp.value.trim() !== '') {
+                    // Bot likely filled hidden field; silently abort
+                    e.preventDefault();
+                }
+            });
+        })();
+        </script>
     </body>
 </html>
